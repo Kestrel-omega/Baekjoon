@@ -46,6 +46,7 @@
         "list": "cpp",
         "xstring": "cpp",
         "stack": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "queue": "cpp"
     }
 }
