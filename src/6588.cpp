@@ -1,32 +1,41 @@
-#include <stdio.h>
+#include <iostream>
 
-int prime[1000001] = {0,0,1, }; // 전체 수 체크
+using namespace std;
+
+bool check_prime(int n)
+{
+    if(n == 1) return false;
+    for(int i = 2; i*i <= n; i++) if(n % i == 0) return false;
+    
+    return true;
+}
 
 int main()
 {
-    int n;
+    cin.tie(NULL);
+	cout.tie(NULL);
+	ios_base :: sync_with_stdio(false);
 
-    for (int i = 2; i < 1001; i++) // 에라토스테네스의 체를 사용하여 구간 내의 모든 소수를 판별함.
-    {
-        for (int j = 2; prime[i] && i * j < 1000001; j++)
-            prime[i * j] = 0;
-    }
+    int a, b;
+    int n = 1;
+    bool flag_prime = false;
 
-    while (scanf("%d", &n) && n) // 입력 받은 수가 유효하면 반복 -> 입력 받는 한 반복
+    while(n)
     {
-        for (int i = 3; i * 2 <= n; i += 2) // 2부터 n의 절반이 될 때 까지 짝수만 체크
+        cin >> n;
+        for(int i = 1; i < n/2; i++)
         {
-            if (prime[i] && prime[n - i]) // 비교된 두 소수의 합이 해당 짝수가 될 때
+            a = 2*i+1;
+            b = n - a;
+
+            if(check_prime(a) && check_prime(b))
             {
-                printf("%d = %d + %d\n", n, i, n - i);
-                break;
-            }
-            else
-            {
-                printf("Goldbach's conjecture is wrong.\n");
+                cout << n << " = " << a << " + " << b << "\n";
+                flag_prime = true;
                 break;
             }
         }
+        if(!flag_prime) cout << "Goldbach's conjecture is wrong.\n";
     }
 
     return 0;
