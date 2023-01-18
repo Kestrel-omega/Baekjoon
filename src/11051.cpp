@@ -2,29 +2,30 @@
 
 using namespace std;
 
-int binomial_coefficient(int N, int K)
-{
-    int result;
-    if(K == 0 || K == N)
-        result = 1;
-    else
-        result = binomial_coefficient(N - 1, K - 1) + binomial_coefficient(N - 1, K);
-}
-
 int main()
 {
     ios_base ::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-    for(int i = 1; i < 11; i++)
+    int N, K;
+    int dp[1001][1001] = {0, };
+
+    cin >> N >> K;
+    
+    dp[1][0] = 1;
+    dp[1][1] = 1;
+
+    for(int i = 2; i <= N; i++)
     {
-        for(int j = 1; j < 2; j++)
+        for(int j = 0; j <= K; j++)
         {
-            printf("%dC%d = %d\n", i, j, binomial_coefficient(i,j));
+            if(j == 0 || j == i) dp[i][j] = 1;
+            else dp[i][j] = (dp[i-1][j-1] + dp[i-1][j]) % 10007;
         }
     }
 
+    cout << dp[N][K] % 10007 << "\n";
     
     return 0;
 }
