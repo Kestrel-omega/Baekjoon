@@ -1,19 +1,33 @@
-#include <stdio.h>
+#include <iostream>
+#include <vector>
+
+using namespace std;
 
 int main()
 {
-    int num, notation, temp;
+    int num, notation, temp = 0;
+    vector<char> result;
 
-    scanf("%d%d", &num, &notation);
+    cin >> num >> notation;
 
-    while (num > 1)
+    while(num != 0)
     {
         temp = num % notation;
-        num = num / notation;
-        if (temp > 9 && notation > 10)
-            printf("%c", 'A' + temp - 10);
+        num /= notation;
+
+        if(temp >= 10)
+        {
+            result.push_back(temp - 10 + 'A');
+        }
         else
-            printf("%d", temp);
+        {
+            result.push_back(temp + '0');
+        }
+    }
+
+    for(int i = result.size() - 1; i >= 0; i--)
+    {
+        cout << result[i];
     }
     return 0;
 }
