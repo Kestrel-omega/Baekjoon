@@ -2,6 +2,21 @@
 
 using namespace std;
 
+int memory[21][21][21];
+
+int function(int a, int b, int c)
+{
+    if(a <= 0 || b <= 0 || c <= 0)
+        return 1;
+    if(a > 20 || b > 20 || c > 20)
+        return 1048576;
+    if(memory[a][b][c] != 0)
+        return memory[a][b][c];
+    if(a < b && b < c)
+        return memory[a][b][c] = function(a, b, c - 1) + function(a, b - 1, c - 1) - function(a, b - 1, c);
+    return memory[a][b][c] = function(a - 1, b, c) + function(a - 1, b - 1, c) + function(a - 1, b, c - 1) - function(a - 1, b - 1, c - 1);
+}
+
 int main()
 {
     ios_base ::sync_with_stdio(false);
@@ -9,36 +24,14 @@ int main()
     cout.tie(NULL);
 
     int a,b,c;
-    int arr[21][21][21] = {1,};
+    
 
     while(1)
     {
         cin >> a >> b >> c;
         if(a == -1 && b == -1 && c == -1)
             break;
-        if(a <= 0 || b <= 0 || c <= 0)
-        {
-            cout << "w(" << a << ", " << b << ", " << c << ") = " << 1 << "\n";
-            continue;
-        }
-        if(a > 20 || b > 20 || c > 20)
-        {
-            cout << "w(" << a << ", " << b << ", " << c << ") = " << 1048576 << "\n";
-            continue;
-        }
-        if(arr[a][b][c] != 0)
-        {
-            cout << "w(" << a << ", " << b << ", " << c << ") = " << arr[a][b][c] << "\n";
-            continue;
-        }
-        if(a < b && b < c)
-        {
-            arr[a][b][c] = arr[a][b][c-1] + arr[a][b-1][c-1] - arr[a][b-1][c];
-            cout << "w(" << a << ", " << b << ", " << c << ") = " << arr[a][b][c] << "\n";
-            continue;
-        }
-        arr[a][b][c] = arr[a-1][b][c] + arr[a-1][b-1][c] + arr[a-1][b][c-1] - arr[a-1][b-1][c-1];
-        cout << "w(" << a << ", " << b << ", " << c << ") = " << arr[a][b][c] << "\n";
+        cout << "w(" << a << ", " << b << ", " << c << ") = " << function(a, b, c) << "\n";
     }
     
     return 0;
