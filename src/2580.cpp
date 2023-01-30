@@ -1,6 +1,52 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
+
+int sudoku[10][10];
+bool row[10][10];
+bool col[10][10];
+bool square[10][10];
+
+bool solve_sudoku(int num)
+{
+    if(num == 81)
+    {
+        for(int i = 0; i < 9; i++)
+        {
+            for(int j = 0; j < 9; j++) cout << sudoku[i][j] << " ";
+            cout << "\n";
+        }
+        return true;
+    }
+
+    int x = num / 9;
+    int y = num % 9;
+
+    if(sudoku[x][y] != 0) return solve_sudoku(num + 1);
+    else
+    {
+        for(int i = 1; i <= 9; i++)
+        {
+            if(!row[x][i] && !col[y][i] && !square[(x / 3) * 3 + y / 3][i])
+            {
+                row[x][i] = true;
+                col[y][i] = true;
+                square[(x / 3) * 3 + y / 3][i] = true;
+                sudoku[x][y] = i;
+
+                if(solve_sudoku(num + 1)) return true;
+
+                row[x][i] = false;
+                col[y][i] = false;
+                square[(x / 3) * 3 + y / 3][i] = false;
+                sudoku[x][y] = 0;
+            }
+        }
+    }
+    return false;
+}
 
 int main()
 {
@@ -8,24 +54,21 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int sudoku[9][9];
-
-    for (int i = 0; i < 9; i++)
+    for(int i = 0; i < 9; i++)
     {
-        for (int j = 0; j < 9; j++) cin >> sudoku[i][j];
+        for(int j = 0; j < 9; j++)
+        {
+            cin >> sudoku[i][j];
+            if(sudoku[i][j] != 0)
+            {
+                row[i][sudoku[i][j]] = true;
+                col[j][sudoku[i][j]] = true;
+                square[(i / 3) * 3 + j / 3][sudoku[i][j]] = true;
+            }
+        }
     }
 
-    // i. Check rows
-
-    bool row[9][9] = {false, };
-
-    // ii. Check columns
-
-    bool col[9][9] = {false, };
-
-    // iii. Check 3x3 squares
-
-    bool square[9][9] = {false, };
+    solve_sudoku(0);
     
     return 0;
 }

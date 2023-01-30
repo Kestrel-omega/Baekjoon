@@ -1,10 +1,37 @@
 #include <iostream>
-#include <string>
 #include <algorithm>
-#include <vector>
-#include <map>
 
 using namespace std;
+
+bool check[9];
+int N, M, arr[9], result[9];
+
+void make_sequence(int cnt)
+{
+    if (cnt == M)
+    {
+        for (int i = 0; i < M; i++)
+        {
+            cout << result[i] << " ";
+        }
+        cout << "\n";
+        return;
+    }
+
+    int before = 0;
+
+    for (int i = 0; i < N; i++)
+    {
+        if (!check[i] && before != arr[i])
+        {
+            check[i] = true;
+            result[cnt] = arr[i];
+            before = arr[i];
+            make_sequence(cnt + 1);
+            check[i] = false;
+        }
+    }
+}
 
 int main()
 {
@@ -12,33 +39,10 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int N, M;
-    vector<int> sequence;
-    map<string, string> map_sequence;
-
     cin >> N >> M;
-
-    for (int i = 0; i < N; i++)
-    {
-        int num;
-        cin >> num;
-        sequence.push_back(num);
-    }
-
-    sort(sequence.begin(), sequence.end());
-
-    do
-    {
-        string temp = "";
-        for (int i = 0; i < M; i++) temp += to_string(sequence[i]) + " ";
-        map_sequence.insert(make_pair(temp, temp));
-        
-    } while (next_permutation(sequence.begin(), sequence.end()));
-
-    for(auto it = map_sequence.begin(); it != map_sequence.end(); it++)
-    {
-        cout << it->second << "\n";
-    }
+    for(int i = 0; i < N; i++) cin >> arr[i];
+    sort(arr, arr + N);
+    make_sequence(0);
     
     return 0;
 }

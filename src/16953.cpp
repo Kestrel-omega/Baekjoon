@@ -1,24 +1,9 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
+#include <queue>
 
 using namespace std;
 
-bool is_possible = false;
-vector<int> cnt_vector;
-
-void dfs(int A, int B, int cnt)
-{
-    if(A == B)
-    {
-        is_possible = true;
-        cnt_vector.push_back(cnt);
-        return;
-    }
-    if(A > B) return;
-    dfs(A*2, B, cnt+1);
-    dfs(A*10+1, B, cnt+1);
-}
+typedef long long int lli;
 
 int main()
 {
@@ -26,17 +11,26 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int A, B, cnt = 1, ret = 0;
+    queue<pair<lli, lli>> q;
+    lli A, B, cnt = 1, ret = 0;
     cin >> A >> B;
     
-    dfs(A, B, cnt);
-
-    if(is_possible)
+    q.push(make_pair(A, cnt));
+    while (!q.empty())
     {
-        sort(cnt_vector.begin(), cnt_vector.end());
-        cout << cnt_vector[0];
+        lli num = q.front().first;
+        lli cnt = q.front().second;
+        q.pop();
+        if (num == B)
+        {
+            ret = cnt;
+            break;
+        }
+        if (num * 2 <= B) q.push(make_pair(num * 2, cnt + 1));
+        if (num * 10 + 1 <= B) q.push(make_pair(num * 10 + 1, cnt + 1));
     }
-    else cout << -1;
+    if (ret == 0) ret = -1;
+    cout << ret << "\n";
 
     return 0;
 }
