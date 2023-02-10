@@ -18,23 +18,26 @@ int main()
 
     int a, b;
     int n = 1;
+    bool is_prime[1000001] = {false, };
     bool flag_prime = false;
 
-    while(n)
-    {
-        cin >> n;
-        for(int i = 1; i < n/2; i++)
-        {
-            a = 2*i+1;
-            b = n - a;
+    for(int i = 3; i <= 1000000; i += 2) {
+        if(check_prime(i)) is_prime[i] = true;
+    }
 
-            if(check_prime(a) && check_prime(b))
-            {
-                cout << n << " = " << a << " + " << b << "\n";
+    while(true) {
+        cin >> n;
+        if(n == 0) break;
+
+        flag_prime = false;
+        for(int i = 3; i <= n; i += 2) {
+            if(is_prime[i] && is_prime[n-i]) {
+                cout << n << " = " << i << " + " << n-i << "\n";
                 flag_prime = true;
                 break;
             }
         }
+
         if(!flag_prime) cout << "Goldbach's conjecture is wrong.\n";
     }
 
