@@ -5,18 +5,18 @@
 
 using namespace std;
 
+int N, M, R;
+int result[100001] = {0, };
+int cnt = 0;
+bool is_visited[100001] = {false, };
+vector<int> graph[100001];
+queue<int> que;
+
 int main()
 {
     ios_base ::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-
-    int N, M, R;
-    int result[100001] = {0, };
-    int cnt = 0;
-    bool is_visited[100001] = {false, };
-    vector<int> graph[100001];
-    queue<int> que;
 
     cin >> N >> M >> R;
 
