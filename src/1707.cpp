@@ -8,7 +8,22 @@
 
 using namespace std;
 
-int V, E;
+int K, V, E;
+vector<int> graph[20001];
+short visited[20001] = {0,};
+
+bool is_bipartite_graph()
+{
+    for(int i = 1; i <= V; i++)
+    {
+        for(int j = 0; j < graph[i].size(); j++)
+        {
+            int next = graph[i][j];
+            if(visited[i] == visited[next]) return false;
+        }
+    }
+    return true;
+}
 
 int main()
 {
@@ -16,78 +31,50 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int K, V, E, u, v;
-    vector<int> graph[20001];
-    int color[20001];
-
     cin >> K;
 
     while(K--)
     {
-        for(int i = 0; i < 20001; i++)
-        {
-            graph[i].clear();
-            color[i] = 0;
-        }
-
         cin >> V >> E;
-        
         for(int i = 0; i < E; i++)
         {
-            cin >> u >> v;
-            graph[u].push_back(u);
-            graph[v].push_back(v);
+            int from, to;
+            cin >> from >> to;
+            graph[from].push_back(to);
+            graph[to].push_back(from);
         }
+
+        queue<int> node;
 
         for(int i = 1; i <= V; i++)
         {
-            if(color[i] == 0)
+            if(visited[i]) continue;
+            node.push(i);
+            visited[i] = RED;
+            while(!node.empty())
             {
-                queue<int> q;
-                q.push(i);
-                color[i] = RED;
-
-                while(!q.empty())
+                int current = node.front();
+                node.pop();
+                for(int j = 0; j < graph[current].size(); j++)
                 {
-                    int cur = q.front();
-                    q.pop();
-
-                    for(int i = 0; i < graph[cur].size(); i++)
+                    int next = graph[current][j];
+                    if(visited[next] == 0)
                     {
-                        int next = graph[cur][i];
-
-                        if(color[next] == 0)
-                        {
-                            if(color[cur] == RED) color[next] = BLUE;
-                            else color[next] = RED;
-                            q.push(next);
-                        }
-                        else
-                        {
-                            if(color[cur] == color[next])
-                            {
-                                cout << "NO\n";
-                                continue;
-                            }
-                        }
+                        visited[next] = (visited[current] == RED) ? BLUE : RED;
+                        node.push(next);
                     }
                 }
             }
         }
 
+        if(is_bipartite_graph()) cout << "YES\n";
+        else cout << "NO\n";
+
         for(int i = 1; i <= V; i++)
         {
-            for(int j = 0; j < graph[i].size(); j++)
-            {
-                if(color[i] == color[graph[i][j]])
-                {
-                    cout << "NO\n";
-                    continue;
-                }
-            }
+            graph[i].clear();
+            visited[i] = 0;
         }
-
-        cout << "YES\n";
     }
     
     return 0;
